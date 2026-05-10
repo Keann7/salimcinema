@@ -84,6 +84,35 @@
                     });
                 });
             }
+
+            function loadSales() {
+                const salesBody = document.getElementById('salesBody');
+                
+                database.ref('salesHistory').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    salesBody.innerHTML = ""; 
+                    
+                    if (data) {
+                        Object.keys(data).forEach((key) => {
+                            const sale = data[key];
+                            const row = `
+                                <tr>
+                                    <td>${sale.tanggal}</td>
+                                    <td>${sale.namaKelas}</td>
+                                    <td>${sale.jumlahKursi}</td>
+                                    <td>
+                                        <button class="btn-edit" onclick="editSale('${key}')">EDIT</button>
+                                        <button class="btn-delete" onclick="deleteSale('${key}')">HAPUS</button>
+                                    </td>
+                                </tr>
+                            `;
+                            salesBody.innerHTML += row;
+                        });
+                    } else {
+                        salesBody.innerHTML = "<tr><td colspan='4'>Belum ada data penjualan.</td></tr>";
+                    }
+                });
+            }
             window.onload = loadSales;
         </script>
 
