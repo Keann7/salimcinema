@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer | Salim Cinema</title>
+    <link rel="stylesheet" href="style_kasir.css">
+    <link rel="stylesheet" href="style_customer_custom.css">
+</head>
+<body>
+
+    <div class="banner-landscape">
+        <img src="banner.jpeg" alt="Promo Film Landscape" onerror="this.style.display='none'">
+    </div>
+
+    <div class="main-layout-wrapper">
+        <div class="sidebar">
+            <div class="poster-potret">
+                <img src="poster_b.png" alt="Poster Film Potret" onerror="this.style.display='none'">
+            </div>
+            
+            <div class="movie-meta-small">
+                <span class="meta-rating">★ 9.5</span>
+                <span class="meta-age">13+ REMAJA</span>
+            </div>
+        </div>
+    
+        <div class="main-content">
+            <div class="legend">
+                <div class="item">
+                    <img src="g.png" alt="Tersedia">
+                    <span>Tersedia</span>
+                </div>
+                <div class="item">
+                    <img src="r.png" alt="Terisi">
+                    <span>Terisi</span>
+                </div>
+                <div class="counter-box" style="background: #f0f0f0; color: #333; margin-left: 20px; border-left: 4px solid #e50914;">
+                    Sisa: <span id="seatCount">30</span>
+                </div>
+            </div>
+    
+            <div class="cinema-layout">
+                <div class="block-wrapper">
+                    <div class="seat-block" id="blockLeft"></div>
+                    <div class="gender-label label-pink">Perempuan</div>
+                </div>
+            
+                <div class="aisle"></div>
+            
+                <div class="block-wrapper">
+                    <div class="seat-block" id="blockRight"></div>
+                    <div class="gender-label label-blue">Laki-laki</div>
+                </div>
+            </div>
+    
+            <div class="screen-area">
+                <div class="screen">LAYAR BIOSKOP</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-credit">
+        Made with <span class="heart">❤</span> by Salim
+    </footer>
+
+    <script src="script_customer.js"></script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: #1a1a1a;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+}
+
+.red-text {
+    color: #e50914;
+}
+
+.header-tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.counter-box {
+    background: #333;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-left: 4px solid #e50914;
+}
+
+.undo-btn {
+    padding: 8px 15px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+}
+
+.undo-btn:hover { background-color: #e67e22; }
+
+.reset-btn {
+    padding: 8px 15px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.reset-btn:hover { background-color: #666; }
+
+.logout-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid #e50914;
+    color: #e50914;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.logout-btn:hover {
+    background: #e50914;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.legend {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 40px;
+    background: #f4f4f4;
+    padding: 10px 40px;
+    border-radius: 10px;
+}
+
+.legend .item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.legend img { width: 25px; }
+
+.cinema-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 100px; 
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.seat-block {
+    display: grid;
+    gap: 20px 15px;
+}
+
+#blockLeft {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#blockRight {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.aisle {
+    display: none;
+}
+
+.gender-label {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+.label-pink {
+    color: rgba(255, 20, 147, 0.5); /* Pink dengan opasitas rendah */
+}
+
+.label-blue {
+    color: rgba(30, 144, 255, 0.5); /* Biru dengan opasitas rendah */
+}
+
+.block-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.seat-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #777;
+}
+
+.seat {
+    width: 70px; 
+    height: 70px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    object-fit: contain;
+}
+
+.seat:not(.booked):hover {
+    transform: scale(1.05);
+}
+
+.seat.booked { 
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.screen-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.screen {
+    width: 80%;
+    height: 35px;
+    background: #333;
+    color: #aaa;
+    text-align: center;
+    line-height: 35px;
+    font-weight: 900;
+    letter-spacing: 10px;
+    border-radius: 5px 5px 0 0;
+    font-size: 0.8rem;
+}
+
+/* Overlay menutupi seluruh layar */
+.modal-overlay {
+    display: none; /* SEMBUNYI DI AWAL */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Efek gelap di belakang pop-up */
+    z-index: 9999;
+    justify-content: center; /* Tengah horizontal */
+    align-items: center;     /* Tengah vertikal */
+}
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-left: 5px solid #e50914;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.4s ease, fadeOut 0.5s ease 2.5s forwards;
+}
+
+.toast.success { border-left-color: #27ae60; }
+.toast.warning { border-left-color: #f39c12; }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { transform: translateX(20px); opacity: 0; visibility: hidden; }
+}
+
+/* Mempercantik Modal Card */
+.modal-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-card h3 {
+    font-size: 1.4rem;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.modal-card input {
+    width: 100%;
+    padding: 15px;           
+    margin: 25px 0;         
+    border: 2px solid #ddd;
+    border-radius: 10px;     
+    box-sizing: border-box;
+    font-size: 1.2rem;       
+    font-weight: bold;        
+    color: #333;
+    transition: all 0.3s ease;
+    text-align: left;     
+}
+
+.modal-card input:focus {
+    border-color: #27ae60;   
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
+    outline: none;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#classNameInput:focus {
+    outline: 2px solid #27ae60;
+    border: none;
+}
+
+
+.btn-cancel { background: #eee; color: #333; }
+.btn-confirm { background: #27ae60; color: white; }
+
+.btn-confirm:hover { background: #b20710; }
+.btn-cancel:hover { background: #ddd; }
+
+/* =========================
+IPAD / TABLET
+SAMA PERSIS SEPERTI DESKTOP
+========================= */
+
+@media screen and (max-width: 1024px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .admin-header {
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+    }
+
+    /* LOGO */
+    .logo {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    /* TOOLS KANAN */
+    .header-tools {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .header-tools button,
+    .counter-box {
+        font-size: 0.75rem;
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+
+    /* CONTENT */
+    .main-content {
+        padding: 20px;
+    }
+
+    /* LEGEND */
+    .legend {
+        gap: 40px;
+        padding: 10px 40px;
+    }
+
+    .legend .item {
+        font-size: 0.9rem;
+    }
+
+    .legend img {
+        width: 25px;
+    }
+
+    /* BIOSKOP */
+    .cinema-layout {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        /* JARAK PEREMPUAN & LAKI */
+        gap: 100px;
+
+        padding: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* GRID */
+    .seat-block {
+        gap: 20px 15px;
+    }
+
+    /* KURSI SAMA PERSIS DESKTOP */
+    .seat {
+        width: 70px;
+        height: 70px;
+    }
+
+    .seat-label {
+        font-size: 0.75rem;
+    }
+
+    /* LABEL */
+    .gender-label {
+        margin-top: 20px;
+        font-size: 1rem;
+        letter-spacing: 5px;
+    }
+
+    /* SCREEN */
+    .screen {
+        width: 80%;
+        height: 35px;
+        line-height: 35px;
+        font-size: 0.8rem;
+        letter-spacing: 10px;
+    }
+}
+
+/* =========================
+MOBILE PHONE
+========================= */
+@media screen and (max-width: 768px) {
+
+    body {
+        height: auto;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    .header-tools {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .header-tools button,
+    .counter-box {
+        width: 100%;
+        text-align: center;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .legend {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .cinema-layout {
+        transform: scale(0.8);
+        transform-origin: top center;
+    }
+
+    .seat {
+        width: 45px;
+        height: 45px;
+    }
+
+    .seat-label {
+        font-size: 0.6rem;
+    }
+
+    .seat-block {
+        gap: 10px 8px;
+    }
+
+    .aisle {
+        width: 40px;
+    }
+
+
+    .gender-label {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+    }
+
+    .screen {
+        width: 95%;
+        height: 30px;
+        line-height: 30px;
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+    }
+
+    .modal-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .modal-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .modal-card input {
+        font-size: 1rem;
+        padding: 12px;
+    }
+}
+
+/* =========================
+SMALL PHONE
+========================= */
+@media screen and (max-width: 480px) {
+
+    .cinema-layout {
+        transform: scale(0.65);
+        margin-top: -40px;
+    }
+
+    .seat {
+        width: 40px;
+        height: 40px;
+    }
+
+    .aisle {
+        width: 25px;
+    }
+
+    .screen {
+        margin-top: -30px;
+    }
+
+    .header-tools {
+        grid-template-columns: 1fr;
+    }
+}

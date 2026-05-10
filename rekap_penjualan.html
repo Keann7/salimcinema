@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rekap Penjualan | Salim Cinema</title>
+        <link rel="stylesheet" href="style_kasir.css">
+        <style>
+            .rekap-container { padding: 50px; max-width: 1000px; margin: 0 auto; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background-color: #e50914; color: white; }
+            .btn-delete { background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+            .btn-edit { background: #f39c12; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin-right: 5px; }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body>
+        <div class="rekap-container">
+            <h1>REKAP PENJUALAN TIKET</h1>
+            <button onclick="window.location.href='kasir_dashboard.html'" class="reset-btn">KEMBALI KE KASIR</button>
+            
+            <table id="salesTable">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Nama Kelas</th>
+                        <th>Jumlah Kursi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="salesBody"></tbody>
+            </table>
+        </div>
+
+        <script>
+            function loadSales() {
+                const salesBody = document.getElementById('salesBody');
+                const salesHistory = JSON.parse(localStorage.getItem('salesHistory')) || [];
+                salesBody.innerHTML = "";
+
+                salesHistory.forEach((sale, index) => {
+                    const row = `
+                        <tr>
+                            <td>${sale.tanggal}</td>
+                            <td>${sale.namaKelas}</td>
+                            <td>${sale.jumlahKursi}</td>
+                            <td>
+                                <button class="btn-edit" onclick="editSale(${sale.id})">EDIT</button>
+                                <button class="btn-delete" onclick="deleteSale(${sale.id})">HAPUS</button>
+                            </td>
+                        </tr>
+                    `;
+                    salesBody.innerHTML += row;
+                });
+            }
+
+            function deleteSale(id) {
+                Swal.fire({
+                    title: 'Hapus Data?',
+                    text: "Data yang dihapus tidak bisa dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e50914',
+                    cancelButtonColor: '#999',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let salesHistory = JSON.parse(localStorage.getItem('salesHistory'));
+                        salesHistory = salesHistory.filter(s => s.id !== id);
+                        localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+                        loadSales();
+                        Swal.fire('Terhapus!', 'Data penjualan telah dihapus.', 'success');
+                    }
+                });
+            }
+
+            function editSale(id) {
+                let salesHistory = JSON.parse(localStorage.getItem('salesHistory'));
+                const sale = salesHistory.find(s => s.id === id);
+
+                Swal.fire({
+                    title: 'Edit Nama Kelas',
+                    input: 'text',
+                    inputValue: sale.namaKelas,
+                    showCancelButton: true,
+                    confirmButtonColor: '#27ae60',
+                    confirmButtonText: 'Simpan Perubahan',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        sale.namaKelas = result.value;
+                        localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+                        loadSales();
+                        Swal.fire('Berhasil!', 'Nama kelas telah diperbarui.', 'success');
+                    }
+                });
+            }
+
+            window.onload = loadSales;
+        </script>
+
+        <div id="toastContainer" class="toast-container"></div>
+    </body>
+</html>

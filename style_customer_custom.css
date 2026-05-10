@@ -1,0 +1,373 @@
+/* Efek Latar Belakang Gradien Lembut */
+body {
+    background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 100%);
+    min-height: 100vh;
+    margin: 0;
+}
+
+.main-layout-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 20px; 
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar untuk Poster & Meta */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.poster-potret {
+    width: 280px; 
+    height: 420px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15); /* Shadow lebih halus */
+    border: 1px solid #ddd;
+}
+
+.poster-potret img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Styling Info Rating & Usia (Kecil) */
+.movie-meta-small {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.meta-rating {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #f39c12; /* Warna emas/kuning */
+}
+
+.meta-age {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #ffffff;
+    border: 1px solid #ddd;
+    background-color: limegreen;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+/* Banner Atas Tetap */
+.banner-landscape {
+    width: 100%;
+    height: 120px; 
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Content dengan efek bayangan agar terlihat 'mengapung' */
+.main-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.footer-credit {
+    text-align: center;
+    font-size: 0.75rem; 
+    color: #888;      
+    padding: 20px 0;
+    width: 100%;
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    margin-top: auto; 
+}
+
+.heart {
+    color: #333;    
+    display: inline-block;
+    animation: heartbeat 1.5s infinite; 
+}
+
+/* =====================================================
+   IPAD / TABLET
+   TAMPILAN SAMA PERSIS DESKTOP
+===================================================== */
+
+@media screen and (max-width: 1024px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* WRAPPER */
+    .main-layout-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+
+        gap: 35px;
+
+        padding: 30px 20px;
+        max-width: 100%;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        flex-shrink: 0;
+    }
+
+    /* POSTER */
+    .poster-potret {
+        width: 240px;
+        height: 360px;
+    }
+
+    /* BANNER */
+    .banner-landscape {
+        height: 120px;
+    }
+
+    .banner-landscape img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+        padding: 25px;
+    }
+
+    /* LEGEND */
+    .legend {
+        gap: 25px;
+        padding: 10px 25px;
+        flex-wrap: nowrap;
+    }
+
+    .legend .item {
+        font-size: 0.85rem;
+    }
+
+    /* BIOSKOP */
+    .cinema-layout {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        /* JARAK PEREMPUAN & LAKI */
+        gap: 100px;
+
+        padding: 20px 0;
+    }
+
+    /* KURSI TETAP BESAR */
+    .seat {
+        width: 70px;
+        height: 70px;
+    }
+
+    .seat-block {
+        gap: 20px 15px;
+    }
+
+    /* LABEL */
+    .gender-label {
+        margin-top: 20px;
+        font-size: 1rem;
+        letter-spacing: 5px;
+    }
+
+    /* SCREEN */
+    .screen {
+        width: 80%;
+        height: 35px;
+        line-height: 35px;
+
+        font-size: 0.8rem;
+        letter-spacing: 10px;
+    }
+}
+
+
+/* =====================================================
+   MOBILE PHONE
+   ANDROID + IPHONE
+===================================================== */
+
+@media screen and (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* WRAPPER MENURUN */
+    .main-layout-wrapper {
+        flex-direction: column;
+        align-items: center;
+
+        gap: 20px;
+
+        padding: 20px 10px;
+    }
+
+    /* BANNER */
+    .banner-landscape {
+        height: 90px;
+    }
+
+    .banner-landscape img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 100%;
+        align-items: center;
+    }
+
+    /* POSTER */
+    .poster-potret {
+        width: 220px;
+        height: 330px;
+    }
+
+    /* META */
+    .movie-meta-small {
+        width: 220px;
+    }
+
+    /* CONTENT */
+    .main-content {
+        width: 100%;
+        padding: 20px 10px;
+        border-radius: 15px;
+    }
+
+    /* LEGEND */
+    .legend {
+        flex-direction: column;
+        gap: 10px;
+
+        width: 100%;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 15px;
+    }
+
+    /* BIOSKOP */
+    .cinema-layout {
+        transform: scale(0.8);
+        transform-origin: top center;
+
+        gap: 40px;
+
+        margin-top: -10px;
+    }
+
+    /* KURSI */
+    .seat {
+        width: 45px;
+        height: 45px;
+    }
+
+    .seat-block {
+        gap: 10px 8px;
+    }
+
+    .seat-label {
+        font-size: 0.6rem;
+    }
+
+    /* LABEL */
+    .gender-label {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+    }
+
+    /* SCREEN */
+    .screen {
+        width: 95%;
+
+        height: 30px;
+        line-height: 30px;
+
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+    }
+
+    /* FOOTER */
+    .footer-credit {
+        font-size: 0.7rem;
+        padding: 15px 0;
+    }
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media screen and (max-width: 480px) {
+
+    /* POSTER */
+    .poster-potret {
+        width: 180px;
+        height: 270px;
+    }
+
+    .movie-meta-small {
+        width: 180px;
+    }
+
+    /* BIOSKOP */
+    .cinema-layout {
+        transform: scale(0.65);
+        transform-origin: top center;
+
+        gap: 20px;
+
+        margin-top: -40px;
+        margin-bottom: -50px;
+    }
+
+    /* KURSI */
+    .seat {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* BANNER */
+    .banner-landscape {
+        height: 75px;
+    }
+
+    /* SCREEN */
+    .screen {
+        margin-top: -20px;
+    }
+}
