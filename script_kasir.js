@@ -10,13 +10,19 @@ const rows = ['D', 'C', 'B', 'A'];
 let availableSeats = 28;
 let historyStack = [];
 
+const firebaseConfig = {
+    databaseURL: "https://salim-cinema-default-rtdb.asia-southeast1.firebasedatabase.app/"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-function saveToStorage() {
+function saveToFirebase() {
     const data = {
         availableSeats: availableSeats,
         bookedSeats: historyStack
     };
-    localStorage.setItem('cinemaData', JSON.stringify(data));
+    // Simpan ke internet
+    database.ref('cinemaData').set(data);
 }
 
 function updateCounter() {
@@ -41,7 +47,7 @@ function createSeats() {
         }
     });
 
-    saveToStorage();
+    saveToFirebase();
 }
 
 
@@ -69,7 +75,7 @@ function renderSeat(container, col, rowName) {
             this.classList.add('booked');
             availableSeats--;
             updateCounter();
-            saveToStorage();
+            saveToFirebase();
         }
     });
 
@@ -89,7 +95,7 @@ function undoLastAction() {
             seatElement.classList.remove('booked');
             availableSeats++;
             updateCounter();
-            saveToStorage();
+            saveToFirebase();
         }
     }
 }
@@ -162,17 +168,14 @@ function closeModal() {
 }
 
 function resetSeats() {
-    createSeats(); // Render ulang dari nol
+    createSeats(); 
     closeModal();
-    // saveToStorage dipanggil di dalam createSeats()
 }
 
-// Menutup modal jika klik di luar area kartu modal
 window.onclick = function(event) {
     if (event.target == modal) {
         closeModal();
     }
 }
 
-// Jalankan sistem saat halaman dimuat
 document.addEventListener('DOMContentLoaded', createSeats);
