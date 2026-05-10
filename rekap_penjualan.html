@@ -35,61 +35,26 @@
         </div>
 
         <script>
-            // Fungsi Menghapus Data di Firebase
-            function deleteSale(key) {
-                Swal.fire({
-                    title: 'Hapus Data?',
-                    text: "Data ini akan terhapus dari cloud secara permanen!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#e50914',
-                    cancelButtonColor: '#999',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // MENGHAPUS BERDASARKAN KEY FIREBASE
-                        database.ref('salesHistory/' + key).remove()
-                            .then(() => {
-                                Swal.fire('Terhapus!', 'Data berhasil dihapus dari pusat.', 'success');
-                            })
-                            .catch((error) => {
-                                Swal.fire('Error', 'Gagal menghapus data: ' + error.message, 'error');
-                            });
-                    }
-                });
+            var database;
+
+            // 3. Konfigurasi
+            const firebaseConfig = {
+                databaseURL: "https://salim-cinema-default-rtdb.asia-southeast1.firebasedatabase.app/"
+            };
+
+            // 4. Inisialisasi Firebase (Dilakukan SEBELUM mendefinisikan fungsi yang memakainya)
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
             }
 
-            // Fungsi Mengedit Nama Kelas di Firebase
-            function editSale(key) {
-                // Ambil data lama dulu untuk ditampilkan di input pop-up
-                database.ref('salesHistory/' + key).once('value').then((snapshot) => {
-                    const currentData = snapshot.val();
+            // TENTUKAN NILAI VARIABEL DATABASE DI SINI
+            database = firebase.database();
 
-                    Swal.fire({
-                        title: 'Edit Nama Kelas',
-                        input: 'text',
-                        inputValue: currentData.namaKelas,
-                        showCancelButton: true,
-                        confirmButtonColor: '#27ae60',
-                        confirmButtonText: 'Simpan Perubahan',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed && result.value) {
-                            // UPDATE HANYA NAMA KELAS DI FIREBASE
-                            database.ref('salesHistory/' + key).update({
-                                namaKelas: result.value
-                            }).then(() => {
-                                Swal.fire('Berhasil!', 'Data pusat telah diperbarui.', 'success');
-                            });
-                        }
-                    });
-                });
-            }
-
+            // 5. Baru buat fungsi loadSales
             function loadSales() {
                 const salesBody = document.getElementById('salesBody');
                 
+                // Sekarang variabel 'database' sudah memiliki nilai dan bisa dipakai
                 database.ref('salesHistory').on('value', (snapshot) => {
                     const data = snapshot.val();
                     salesBody.innerHTML = ""; 
@@ -111,11 +76,31 @@
                             salesBody.innerHTML += row;
                         });
                     } else {
-                        salesBody.innerHTML = "<tr><td colspan='4'>Belum ada data penjualan.</td></tr>";
+                        salesBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Belum ada data penjualan di Cloud.</td></tr>";
                     }
+                }, (error) => {
+                    console.error("Gagal mengambil data:", error);
                 });
             }
-            window.onload = loadSales;
+
+            // 6. Jalankan fungsi loadSales setelah seluruh HTML selesai dimuat
+            window.onload = function() {
+                loadSales();
+            };
+
+            // Fungsi Tambahan agar tidak error saat diklik
+            function deleteSale(key) {
+                if (confirm("Hapus data rekap ini?")) {
+                    database.ref('salesHistory/' + key).remove();
+                }
+            }
+
+            function editSale(key) {
+                const newName = prompt("Masukkan nama kelas baru:");
+                if (newName) {
+                    database.ref('salesHistory/' + key).update({ namaKelas: newName });
+                }
+            }
         </script>
 
         <div id="toastContainer" class="toast-container"></div>
