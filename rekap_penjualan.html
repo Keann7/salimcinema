@@ -33,31 +33,11 @@
         </div>
 
         <script>
-            function loadSales() {
-                const salesBody = document.getElementById('salesBody');
-                const salesHistory = JSON.parse(localStorage.getItem('salesHistory')) || [];
-                salesBody.innerHTML = "";
-
-                salesHistory.forEach((sale, index) => {
-                    const row = `
-                        <tr>
-                            <td>${sale.tanggal}</td>
-                            <td>${sale.namaKelas}</td>
-                            <td>${sale.jumlahKursi}</td>
-                            <td>
-                                <button class="btn-edit" onclick="editSale(${sale.id})">EDIT</button>
-                                <button class="btn-delete" onclick="deleteSale(${sale.id})">HAPUS</button>
-                            </td>
-                        </tr>
-                    `;
-                    salesBody.innerHTML += row;
-                });
-            }
-
-            function deleteSale(id) {
+            // Fungsi Menghapus Data di Firebase
+            function deleteSale(key) {
                 Swal.fire({
                     title: 'Hapus Data?',
-                    text: "Data yang dihapus tidak bisa dikembalikan!",
+                    text: "Data ini akan terhapus dari cloud secara permanen!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#e50914',
@@ -66,37 +46,44 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        let salesHistory = JSON.parse(localStorage.getItem('salesHistory'));
-                        salesHistory = salesHistory.filter(s => s.id !== id);
-                        localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
-                        loadSales();
-                        Swal.fire('Terhapus!', 'Data penjualan telah dihapus.', 'success');
+                        // MENGHAPUS BERDASARKAN KEY FIREBASE
+                        database.ref('salesHistory/' + key).remove()
+                            .then(() => {
+                                Swal.fire('Terhapus!', 'Data berhasil dihapus dari pusat.', 'success');
+                            })
+                            .catch((error) => {
+                                Swal.fire('Error', 'Gagal menghapus data: ' + error.message, 'error');
+                            });
                     }
                 });
             }
 
-            function editSale(id) {
-                let salesHistory = JSON.parse(localStorage.getItem('salesHistory'));
-                const sale = salesHistory.find(s => s.id === id);
+            // Fungsi Mengedit Nama Kelas di Firebase
+            function editSale(key) {
+                // Ambil data lama dulu untuk ditampilkan di input pop-up
+                database.ref('salesHistory/' + key).once('value').then((snapshot) => {
+                    const currentData = snapshot.val();
 
-                Swal.fire({
-                    title: 'Edit Nama Kelas',
-                    input: 'text',
-                    inputValue: sale.namaKelas,
-                    showCancelButton: true,
-                    confirmButtonColor: '#27ae60',
-                    confirmButtonText: 'Simpan Perubahan',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed && result.value) {
-                        sale.namaKelas = result.value;
-                        localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
-                        loadSales();
-                        Swal.fire('Berhasil!', 'Nama kelas telah diperbarui.', 'success');
-                    }
+                    Swal.fire({
+                        title: 'Edit Nama Kelas',
+                        input: 'text',
+                        inputValue: currentData.namaKelas,
+                        showCancelButton: true,
+                        confirmButtonColor: '#27ae60',
+                        confirmButtonText: 'Simpan Perubahan',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value) {
+                            // UPDATE HANYA NAMA KELAS DI FIREBASE
+                            database.ref('salesHistory/' + key).update({
+                                namaKelas: result.value
+                            }).then(() => {
+                                Swal.fire('Berhasil!', 'Data pusat telah diperbarui.', 'success');
+                            });
+                        }
+                    });
                 });
             }
-
             window.onload = loadSales;
         </script>
 
